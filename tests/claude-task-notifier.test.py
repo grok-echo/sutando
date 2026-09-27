@@ -463,7 +463,11 @@ esac
         return self._strays()
 
     def _stop_fixture_watchers(self):
-        self._kill_strays()
+        left = self._kill_strays()
+        if left:
+            raise AssertionError(
+                "fixture watcher(s) survived cleanup: %s" % (left,)
+            )
 
     def _env(self, extra=None):
         env = dict(os.environ)
